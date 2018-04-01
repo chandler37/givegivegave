@@ -7,6 +7,10 @@ https://devcenter.heroku.com/articles/getting-started-with-rails5
 regarding running `bundle install`, `rake db:create`, `rake db:migrate`, `rails server`, `git
 push heroku my_topic_branch:master`, etc.
 
+TODO: read the above again regarding setting up puma.
+
+For seeing your heroku logs you might like to install the free papertrail add-on.
+
 If you are on OS X you can use homebrew and rbenv to install ruby.
 
 TODO: Integrate further with
