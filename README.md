@@ -1,24 +1,14 @@
-# README
+# givegivegave
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The word "give" should make you think of a charity database.
 
-Things you may want to cover:
+This is Ruby on Rails (Ruby 2.5, Rails 5.1) on Heroku. See
+https://devcenter.heroku.com/articles/getting-started-with-rails5
 
-* Ruby version
+regarding running `rake db:create`, `rake db:migrate`, `rails server`, `git
+push heroku my_topic_branch:master`, etc.
 
-* System dependencies
+TODO: Integrate with https://www.charitynavigator.org/index.cfm?bay=content.view&cpid=1397
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+TODO: write a view of a charity that uses a Charity model with details from the
+charitynavigator API.
