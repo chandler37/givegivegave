@@ -94,3 +94,5 @@ RSpec.configure do |config|
   config.profile_examples = 10
 =end
 end
+
+Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f }
