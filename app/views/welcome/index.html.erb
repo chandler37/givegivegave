@@ -5,3 +5,11 @@
 <p>
   This might be a good time to <%= link_to "sign out", destroy_user_session_path, :method => :delete %> or <%= link_to "sign in", new_user_session_path %>
 </p>
+<p>
+  The only view we've got for you is the <%= link_to "list of charities",  charities_path %>
+</p>
+<% if can? :dashboard, nil %>
+<p>
+  You are an admin so you can use <%= link_to "rails_admin",  rails_admin_path %>
+</p>
+<% end %>

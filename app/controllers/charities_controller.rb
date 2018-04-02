@@ -1,4 +1,4 @@
-class CharitiesController < ApplicationController
+class CharitiesController < ::NonRailsAdminApplicationController
   load_and_authorize_resource
 
   # GET /charities
