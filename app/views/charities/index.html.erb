@@ -31,8 +31,8 @@
         <td><%= charity.stars_financial %></td>
         <td><%= charity.stars_accountability %></td>
         <td><%= link_to 'Show', charity %></td>
-        <td><%= link_to 'Edit', edit_charity_path(charity) %></td>
-        <td><%= link_to 'Destroy', charity, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><% if can? :update, charity %> <%= link_to 'Edit', edit_charity_path(charity) %><% end %></td>
+        <td><% if can? :destroy, charity %> <%= link_to 'Destroy', charity, method: :delete, data: { confirm: 'Are you sure?' } %><% end %> </td>
       </tr>
     <% end %>
   </tbody>
@@ -40,4 +40,6 @@
 
 <br>
 
+<% if can? :create, Charity %>
 <%= link_to 'New Charity', new_charity_path %>
+<% end %>

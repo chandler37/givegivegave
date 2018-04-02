@@ -1,11 +1,9 @@
 class CharitiesController < ApplicationController
-  before_action :authenticate_user!, except: [:show, :index] # TODO(chandler37): but restrict mutations to admins, not regular users
-  before_action :set_charity, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /charities
   # GET /charities.json
   def index
-    @charities = Charity.all
   end
 
   # GET /charities/1
@@ -15,7 +13,6 @@ class CharitiesController < ApplicationController
 
   # GET /charities/new
   def new
-    @charity = Charity.new
   end
 
   # GET /charities/1/edit
@@ -25,8 +22,6 @@ class CharitiesController < ApplicationController
   # POST /charities
   # POST /charities.json
   def create
-    @charity = Charity.new(charity_params)
-
     respond_to do |format|
       if @charity.save
         format.html { redirect_to @charity, notice: 'Charity was successfully created.' }
@@ -63,13 +58,9 @@ class CharitiesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_charity
-      @charity = Charity.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def charity_params
-      params.require(:charity).permit(:name, :ein, :description, :score_overall, :score_financial, :score_accountability, :stars_overall, :stars_financial, :stars_accountability)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def charity_params
+    params.require(:charity).permit(:name, :ein, :description, :score_overall, :score_financial, :score_accountability, :stars_overall, :stars_financial, :stars_accountability)
+  end
 end
