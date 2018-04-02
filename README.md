@@ -17,13 +17,27 @@ TODO: Integrate further with
 https://www.charitynavigator.org/index.cfm?bay=content.view&cpid=1397 -- see
 lib/charity_navigator.
 
-TODO: Integrate the charitynavigator API with the User model
+TODO: Integrate the charitynavigator API with the Charity model -- it has some
+fields for star ratings already; populate them at creation time
 
 TODO: Integrate with Sendgrid for devise's emails
 
 MAYBE: Integrate with Sentry (Raven) for stack traces
 
 MAYBE: remove the new/edit Charity actions, requiring rails_admin to do that?
+
+## Git workflow
+
+Fork this repo, make your change on a topic branch (a.k.a. feature branch), and
+submit a pull request against this repo to get a code review started.
+
+```
+git checkout -b do_something
+edits...
+git commit -a -m 'did something'
+git push origin do_something
+create a pull request on givegivegave repo against your new branch
+```
 
 ## Authentication and Authorization
 
@@ -43,7 +57,7 @@ Use `bundle exec rails c` locally or `heroku run bundle exec rails c`:
 You can use the /admin URL to manage database objects and users if you are a
 superuser.
 
-# Debugging the Database
+## Debugging the Database
 
 Using `psql`:
 
@@ -84,3 +98,7 @@ Changing some code? Delete all the relevant cassette YAML files (.yml) and run
 the tests.
 
 Run the rspec test suite with `bundle exec rspec`
+
+You must run postgres; see
+https://devcenter.heroku.com/articles/getting-started-with-rails5 regarding
+installing it.
