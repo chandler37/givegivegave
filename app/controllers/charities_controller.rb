@@ -1,4 +1,5 @@
 class CharitiesController < ApplicationController
+  before_action :authenticate_user!, except: [:show, :index] # TODO(chandler37): but restrict mutations to admins, not regular users
   before_action :set_charity, only: [:show, :edit, :update, :destroy]
 
   # GET /charities
