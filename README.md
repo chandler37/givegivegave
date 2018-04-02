@@ -4,7 +4,7 @@ The word "give" should make you think of a charity database.
 
 This is Ruby on Rails (Ruby 2.5, Rails 5.1) on Heroku. See
 https://devcenter.heroku.com/articles/getting-started-with-rails5
-regarding running `bundle install`, `rake db:create`, `rake db:migrate`, `rails server`, `git
+regarding running `bundle install`, `bundle exec rake db:create`, `bundle exec rake db:migrate`, `bundle exec rails server`, `git
 push heroku my_topic_branch:master`, etc.
 
 TODO: read the above again regarding setting up puma.
@@ -102,3 +102,9 @@ Run the rspec test suite with `bundle exec rspec`
 You must run postgres; see
 https://devcenter.heroku.com/articles/getting-started-with-rails5 regarding
 installing it.
+
+Before tests will work you must create the test database with the following:
+
+`bundle exec rake db:create db:migrate`
+
+TODO: make the tests pass. spec/lib/**/*.rb should already work.

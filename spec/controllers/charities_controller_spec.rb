@@ -24,16 +24,17 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe CharitiesController, type: :controller do
+  include Devise::Test::ControllerHelpers
 
   # This should return the minimal set of attributes required to create a valid
   # Charity. As you add validations to Charity, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {name: "a charity"}
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {unknown_field: "foo"}
   }
 
   # This should return the minimal set of values that should be in the session

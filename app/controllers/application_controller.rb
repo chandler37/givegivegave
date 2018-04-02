@@ -8,5 +8,8 @@ class ApplicationController < ActionController::Base
     end
   end
   before_action :authenticate_user!
-  check_authorization :unless => :devise_controller?
+
+  # I'm not clueful enough to exclude rails_admin as well as devise like so:
+  #   check_authorization :unless => :devise_controller?
+  # THerefore please subclass NonRailsAdminApplicationController instead of this one.
 end
