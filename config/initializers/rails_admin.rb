@@ -8,7 +8,7 @@ RailsAdmin.config do |config|
   end
   config.current_user_method(&:current_user)
 
-  ## == Cancan ==
+  ## == Cancan == TODO(chandler37): next up...
   # config.authorize_with :cancan
 
   ## == Pundit ==
