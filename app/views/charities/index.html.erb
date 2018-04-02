@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Charities</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Ein</th>
+      <th>Description</th>
+      <th>Score overall</th>
+      <th>Score financial</th>
+      <th>Score accountability</th>
+      <th>Stars overall</th>
+      <th>Stars financial</th>
+      <th>Stars accountability</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @charities.each do |charity| %>
+      <tr>
+        <td><%= charity.name %></td>
+        <td><%= charity.ein %></td>
+        <td><%= charity.description %></td>
+        <td><%= charity.score_overall %></td>
+        <td><%= charity.score_financial %></td>
+        <td><%= charity.score_accountability %></td>
+        <td><%= charity.stars_overall %></td>
+        <td><%= charity.stars_financial %></td>
+        <td><%= charity.stars_accountability %></td>
+        <td><%= link_to 'Show', charity %></td>
+        <td><%= link_to 'Edit', edit_charity_path(charity) %></td>
+        <td><%= link_to 'Destroy', charity, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Charity', new_charity_path %>
