@@ -62,6 +62,11 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "givegivegave_#{Rails.env}"
   config.action_mailer.perform_caching = false
 
+  unless ENV['ACTION_MAILER_HOST'].present?
+    raise "misconfiguration: needs ACTION_MAILER_HOST environment variable"
+  end
+  config.action_mailer.default_url_options = { host: ENV['ACTION_MAILER_HOST'], protocol: 'https' }
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false

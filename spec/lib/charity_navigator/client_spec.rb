@@ -1,4 +1,3 @@
-# TODO(chandler37): Use VCR to record the http call
 RSpec.describe CharityNavigator::Client do
   describe "#get" do
     specify "works to GET /v2/Organizations" do
