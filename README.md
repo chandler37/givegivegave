@@ -43,7 +43,8 @@ To send confirmation and reset emails, etc:
 Sign up for a Sendgrid account (it's a heroku add-on if you want to do it that
 way) and get an API key and set it via `heroku config:set
 SENDGRID_API_KEY=blah`. Try resetting your password and you should see the
-email.
+email. You may want to disable "Click Tracking" so the link is to your host and
+not *.ct.sendgrid.net.
 
 Even if you don't use Sendgrid for email, you must set the environment variable
 `ACTION_MAILER_HOST` to your hostname (example.com, e.g.) with `heroku config:set`.
