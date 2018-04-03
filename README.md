@@ -7,7 +7,8 @@ https://devcenter.heroku.com/articles/getting-started-with-rails5
 regarding running `bundle install`, `bundle exec rake db:create`, `bundle exec rake db:migrate`, `bundle exec rails server`, `git
 push heroku my_topic_branch:master`, etc.
 
-For seeing your heroku logs you might like to install the free papertrail add-on.
+For seeing your heroku logs you might like to install the free papertrail
+add-on. You can use the CLI to see your logs with `heroku addons:open papertrail`.
 
 If you are on OS X you can use homebrew and rbenv to install ruby.
 
@@ -36,6 +37,16 @@ create a pull request on givegivegave repo against your new branch
 We use devise for authentication and cancancan for authorization. Our user
 model is User. devise is very configurable. We have some of its views (HTML,
 email) here ready to be customized.
+
+To send confirmation and reset emails, etc:
+
+Sign up for a Sendgrid account (it's a heroku add-on if you want to do it that
+way) and get an API key and set it via `heroku config:set
+SENDGRID_API_KEY=blah`. Try resetting your password and you should see the
+email.
+
+Even if you don't use Sendgrid for email, you must set the environment variable
+`ACTION_MAILER_HOST` to your hostname (example.com, e.g.) with `heroku config:set`.
 
 ## Superusers a.k.a. Admins
 
