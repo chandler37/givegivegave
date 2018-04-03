@@ -7,26 +7,18 @@ https://devcenter.heroku.com/articles/getting-started-with-rails5
 regarding running `bundle install`, `bundle exec rake db:create`, `bundle exec rake db:migrate`, `bundle exec rails server`, `git
 push heroku my_topic_branch:master`, etc.
 
-TODO: read the above again regarding setting up puma.
-
 For seeing your heroku logs you might like to install the free papertrail add-on.
 
 If you are on OS X you can use homebrew and rbenv to install ruby.
 
-TODO: Integrate further with
-https://www.charitynavigator.org/index.cfm?bay=content.view&cpid=1397 -- see
-lib/charity_navigator.
+## TODOs: What Needs Doing
 
-TODO: Integrate the charitynavigator API with the Charity model -- it has some
-fields for star ratings already; populate them at creation time
+See the
+[github issue tracker](https://github.com/chandler37/givegivegave/issues). There's
+something to do no matter your skill level or commitment level. Learn all the
+tools the pros use while you pave the way for some world-changing applications!
 
-TODO: Integrate with Sendgrid for devise's emails
-
-MAYBE: Integrate with Sentry (Raven) for stack traces
-
-MAYBE: remove the new/edit Charity actions, requiring rails_admin to do that?
-
-## Git workflow
+## Git Workflow
 
 Fork this repo, make your change on a topic branch (a.k.a. feature branch), and
 submit a pull request against this repo to get a code review started.
@@ -41,7 +33,9 @@ create a pull request on givegivegave repo against your new branch
 
 ## Authentication and Authorization
 
-We use devise and cancancan.
+We use devise for authentication and cancancan for authorization. Our user
+model is User. devise is very configurable. We have some of its views (HTML,
+email) here ready to be customized.
 
 ## Superusers a.k.a. Admins
 
@@ -88,11 +82,10 @@ givegivegave_development=# \dt
 givegivegave_development=# select * from users;
 ```
 
-## Running tests
+## Running Tests
 
 We use VCR to record all HTTP interactions so that you can run unittests
-without an internet connection. TODO: delete the test::unit tests; we only use
-rspec.
+without an internet connection.
 
 Changing some code? Delete all the relevant cassette YAML files (.yml) and run
 the tests.
@@ -106,5 +99,3 @@ installing it.
 Before tests will work you must create the test database with the following:
 
 `bundle exec rake db:create db:migrate`
-
-TODO: make the tests pass. spec/lib/**/*.rb should already work.
