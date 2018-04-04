@@ -24,4 +24,10 @@ RSpec.describe Charity, type: :model do
       charity.reload
     end
   end
+  specify "requires ein to be unique" do
+    create :charity, ein: "Ab-1 "
+    expect {
+      create :charity, ein: "ab1"
+    }.to raise_error ActiveRecord::RecordInvalid, /Ein has already been taken/
+  end
 end

@@ -6,7 +6,7 @@ RSpec.describe "charities/index", type: :view do
     assign(:charities, [
       Charity.create!(
         :name => "Name",
-        :ein => "Ein",
+        :ein => "Ein1",
         :description => "MyText",
         :score_overall => 2.5,
         :score_financial => 3.5,
@@ -17,7 +17,7 @@ RSpec.describe "charities/index", type: :view do
       ),
       Charity.create!(
         :name => "Name",
-        :ein => "Ein",
+        :ein => "Ein-2",
         :description => "MyText",
         :score_overall => 2.5,
         :score_financial => 3.5,
@@ -33,7 +33,8 @@ RSpec.describe "charities/index", type: :view do
     # TODO(chandler): test that admins can manage charities but non-admins cannot.
     render
     assert_select "tr>td", :text => "Name".to_s, :count => 2
-    assert_select "tr>td", :text => "Ein".to_s, :count => 2
+    assert_select "tr>td", :text => "ein1".to_s, :count => 1
+    assert_select "tr>td", :text => "ein2".to_s, :count => 1
     assert_select "tr>td", :text => "MyText".to_s, :count => 2
     assert_select "tr>td", :text => 2.5.to_s, :count => 2
     assert_select "tr>td", :text => 3.5.to_s, :count => 2
