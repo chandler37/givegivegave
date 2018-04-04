@@ -17,4 +17,11 @@ RSpec.describe Charity, type: :model do
       Charity.create!(name: nil)
     }.to raise_error ActiveRecord::RecordInvalid
   end
+  context "has a factory" do
+    let!(:charity) { create :charity }
+    it do
+      expect(charity.name).to be_present
+      charity.reload
+    end
+  end
 end

@@ -11,8 +11,8 @@ require 'rails_helper'
 RSpec.describe CharitiesController, type: :controller do
   include Devise::Test::ControllerHelpers
 
-  let(:user) { User.create!(email: "a@b.c", password: "very-secret") }
-  let(:admin) { User.create!(email: "admin@b.c", password: "very-secret", admin: true) }
+  let(:user) { create :user }
+  let(:admin) { create :admin }
 
   let(:valid_attributes) {
     {name: "a charity"}
