@@ -2,7 +2,7 @@ class Charity < ApplicationRecord
   validates :name, presence: true
   validates :ein, uniqueness: true
 
-  # TODO(chandler37): add an index on ein. store the original EIN with "-" in it.
+  # TODO(chandler37): store the original EIN with "-" in it for display?
 
   before_validation :normalize_ein
 
