@@ -22,4 +22,13 @@ RSpec.describe User, type: :model do
     )
     expect(result[0].keys.sort).to eq %w{admin confirmation_sent_at confirmation_token confirmed_at created_at current_sign_in_at current_sign_in_ip email encrypted_password failed_attempts id last_sign_in_at last_sign_in_ip locked_at remember_created_at reset_password_sent_at reset_password_token sign_in_count unconfirmed_email unlock_token updated_at}
   end
+
+  context "has a couple of factories" do
+    let!(:non_admin) { create :user }
+    let!(:admin) { create :admin }
+    specify "that are admin if they should be" do
+      expect(admin.admin).to eq true
+      expect(non_admin.admin).to eq false
+    end
+  end
 end
