@@ -1,5 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Charity, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  # TODO(chandler37): more tests, e.g. how long can a string (vs. text) be? do
+  # we do the right thing with really long names?
+  it "builds" do
+    Charity.create!(name: "f")
+  end
+  it "fails to build without a name" do
+    expect {
+      Charity.create!
+    }.to raise_error ActiveRecord::RecordInvalid
+    expect {
+      Charity.create!(name: "")
+    }.to raise_error ActiveRecord::RecordInvalid
+    expect {
+      Charity.create!(name: nil)
+    }.to raise_error ActiveRecord::RecordInvalid
+  end
 end
