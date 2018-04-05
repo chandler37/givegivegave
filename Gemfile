@@ -33,6 +33,8 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'rack-timeout' # 15 second timeout by default
+
 gem 'faraday', '~> 0.14.0'
 
 gem 'rails_admin', '~> 1.3'
