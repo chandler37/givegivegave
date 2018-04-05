@@ -11,5 +11,13 @@ class ApplicationController < ActionController::Base
 
   # I'm not clueful enough to exclude rails_admin as well as devise like so:
   #   check_authorization :unless => :devise_controller?
-  # THerefore please subclass NonRailsAdminApplicationController instead of this one.
+  # Therefore please subclass NonRailsAdminApplicationController instead of this one.
+
+  private
+
+  def after_inactive_sign_up_path_for(resource)
+    # The flash message will be destroyed otherwise.
+    new_user_session_path
+  end
+
 end
