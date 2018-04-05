@@ -1,6 +1,8 @@
 env:
   global:
   - PGPORT=5433
+services:
+  - postgresql
 addons:
   postgresql: "10.1"
 before_script:
