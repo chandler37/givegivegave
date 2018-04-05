@@ -1,11 +1,14 @@
 require 'rails_helper'
 
-# TODO(chandler37): support disabling users with devise. keep a timestamp of
-# when the user was disabled. that email address can never again be used. Be
-# sure not to break 'confirmable'. Search the web for
-# #active_for_authentication?
 RSpec.describe User, type: :model do
   let!(:user) { User.create!(email: "f@a.b", password: "f"*8) }
+  specify "can be disabled without being deleted banning that email address for life" do
+    # To disable a user, use rails_admin.
+    expect(user.active_for_authentication?).to be_truthy
+    user.update_attributes!(disabled_at: Time.now)
+    expect(user.reload.disabled_at).to be_truthy
+    expect(user.active_for_authentication?).to be_falsy
+  end
   specify "has an email" do
     expect(user.reload.email).to eq "f@a.b"
   end
@@ -51,7 +54,7 @@ RSpec.describe User, type: :model do
     result = ActiveRecord::Base.connection.execute(
       'SELECT * FROM users LIMIT 1'
     )
-    expect(result[0].keys.sort).to eq %w{admin confirmation_sent_at confirmation_token confirmed_at created_at current_sign_in_at current_sign_in_ip email encrypted_password failed_attempts id last_sign_in_at last_sign_in_ip locked_at remember_created_at reset_password_sent_at reset_password_token sign_in_count unconfirmed_email unlock_token updated_at}
+    expect(result[0].keys.sort).to eq %w{admin confirmation_sent_at confirmation_token confirmed_at created_at current_sign_in_at current_sign_in_ip disabled_at email encrypted_password failed_attempts id last_sign_in_at last_sign_in_ip locked_at remember_created_at reset_password_sent_at reset_password_token sign_in_count unconfirmed_email unlock_token updated_at}
   end
 
   context "has a couple of factories" do
