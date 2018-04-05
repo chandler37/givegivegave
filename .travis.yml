@@ -4,8 +4,6 @@ before_script:
   - cp config/database.yml.travis config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
 language: ruby
-dist: precise
-sudo: false
 rvm:
   - 2.5.1
 script:
