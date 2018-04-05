@@ -13,6 +13,7 @@ RSpec.describe Cacheline, type: :model do
       }.to raise_error ActiveRecord::RecordInvalid, /Validation failed: Http status must be equal to 200/
     end
   end
+
   context "strips authentication" do
     let(:url_with_auth0) { "https://api.data.charitynavigator.org/v2/Organizations?app_id=CHARITYNAVIGATORAPPID&app_key=CHARITYNAVIGATORAPPKEY" }
     let(:url_without_auth0) { "https://api.data.charitynavigator.org/v2/Organizations?app_id=<APP_ID>&app_key=<APP_KEY>" }
@@ -29,6 +30,18 @@ RSpec.describe Cacheline, type: :model do
       expect(cl1.reload.url_minus_auth).to eq url_without_auth0
     end
   end
-#  context "compresses bodies" do
-#  end
+
+  context "compresses bodies" do
+    let(:foo) { create :cacheline, uncompressed_body: "foo" }
+    let(:foofoofoo) { create :cacheline, uncompressed_body: "foo"*100 }
+    specify "foo" do
+      expect(foo.uncompressed_body).to eq "foo"
+      expect(foo.reload.uncompressed_body).to eq "foo"
+      expect(foo.reload.body).to eq "eAFLy88HAAKCAUU="
+    end
+    specify "foofoo..." do
+      expect(foofoofoo.uncompressed_body).to eq "foo"*100
+      expect(foofoofoo.body.size).to eq 24
+    end
+  end
 end
