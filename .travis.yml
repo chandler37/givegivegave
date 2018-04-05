@@ -1,0 +1,14 @@
+env:
+  global:
+  - TRAVIS_RUBY_VERSION=2.4.1
+services:
+  - postgresql
+before_script:
+  - cp config/database.yml.travis config/database.yml
+  - psql -c 'create database travis_ci_test;' -U postgres
+language: ruby
+rvm:
+  - 2.4.1
+script:
+  - bundle exec rails db:migrate RAILS_ENV=test
+  - bundle exec rspec
