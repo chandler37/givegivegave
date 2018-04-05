@@ -43,11 +43,17 @@ RSpec.describe CharitiesController, type: :controller do
   end
 
   describe "GET #show" do
+    let(:charity) { create :charity }
     it "returns a success response if you are logged in" do
       sign_in user
-      charity = Charity.create! valid_attributes
       get :show, params: {id: charity.to_param}, session: valid_session
       expect(response).to be_success
+    end
+    it "302s if you haven't confirmed your email address" do
+      user.update_attributes!(confirmed_at: nil)
+      sign_in user
+      get :show, params: {id: charity.to_param}, session: valid_session
+      expect(response).to redirect_to(new_user_session_url)
     end
   end
 

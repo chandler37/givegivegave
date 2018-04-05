@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Charities", type: :request do
-  let!(:user) { User.create!(email: "a@b.c", password: "very-secret") }
+  let!(:user) { create :user }
 
   describe "GET /charities" do
     it "redirects for unauthenticated folks" do

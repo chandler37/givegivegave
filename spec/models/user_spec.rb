@@ -4,6 +4,8 @@ RSpec.describe User, type: :model do
   let!(:user) { User.create!(email: "f@a.b", password: "f"*8) }
   specify "can be disabled without being deleted banning that email address for life" do
     # To disable a user, use rails_admin.
+    expect(user.active_for_authentication?).to be_falsy
+    user.update_attributes!(confirmed_at: Time.now)
     expect(user.active_for_authentication?).to be_truthy
     user.update_attributes!(disabled_at: Time.now)
     expect(user.reload.disabled_at).to be_truthy
