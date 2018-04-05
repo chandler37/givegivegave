@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers:{ registrations: "registrations" }
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :charities
   root 'welcome#index'
