@@ -5,4 +5,12 @@ class User < ApplicationRecord
   # :confirmable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :lockable
+
+  def active_for_authentication?
+    super && disabled_at.nil?
+  end
+
+  def inactive_message
+    disabled_at.nil? ? super : :banhammered
+  end
 end
