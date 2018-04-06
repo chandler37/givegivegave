@@ -1,6 +1,15 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  unless config.action_dispatch.encrypted_cookie_salt.present?
+    raise "where in Rails do they now configure this salt?"
+  end
+  config.action_dispatch.encrypted_cookie_salt = "RAILS_ENCRYPTED_COOKIE_SALT" # don't use this value in production
+  unless config.action_dispatch.encrypted_signed_cookie_salt.present?
+    raise "where in Rails do they now configure this salt?"
+  end
+  config.action_dispatch.encrypted_signed_cookie_salt = "RAILS_ENCRYPTED_SIGNED_COOKIE_SALT" # don't use this value in production
+
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.

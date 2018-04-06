@@ -39,6 +39,18 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
+  unless ENV["RAILS_ENCRYPTED_COOKIE_SALT"].present? && ENV["RAILS_ENCRYPTED_SIGNED_COOKIE_SALT"].present?
+    raise "export RAILS_ENCRYPTED_COOKIE_SALT and RAILS_ENCRYPTED_SIGNED_COOKIE_SALT to continue"
+  end
+  unless config.action_dispatch.encrypted_cookie_salt.present?
+    raise "where in Rails do they now configure this salt?"
+  end
+  config.action_dispatch.encrypted_cookie_salt = ENV["RAILS_ENCRYPTED_COOKIE_SALT"]
+  unless config.action_dispatch.encrypted_signed_cookie_salt.present?
+    raise "where in Rails do they now configure this salt?"
+  end
+  config.action_dispatch.encrypted_signed_cookie_salt = ENV["RAILS_ENCRYPTED_SIGNED_COOKIE_SALT"]
+
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
