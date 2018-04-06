@@ -7,6 +7,7 @@ class Charity < ApplicationRecord
   before_validation :normalize_ein
 
   def self.canonical_ein(ein)
+    # TODO(chandler37): How shall we deal with 8-digit EINs: leading zero?
     ein.strip.downcase.gsub("-", "")
   end
 
