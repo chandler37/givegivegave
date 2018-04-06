@@ -4,14 +4,12 @@ class Cacheline < ApplicationRecord
   after_find :uncompress_body
   attr_accessor :uncompressed_body
 
-  APP_KEY_PLACEHOLDER = "<APP_KEY>".freeze
-  APP_ID_PLACEHOLDER = "<APP_ID>".freeze
-
   # this cache will need an update to strip authentication from any other APIs
   # we use:
-  VALID_URL_REGEX = /\Ahttps:..api.data.charitynavigator.org.v2.*\bapp_id=#{APP_ID_PLACEHOLDER}.*&app_key=#{APP_KEY_PLACEHOLDER}/i
+  VALID_URL_REGEX = /\Ahttps:\/\/api.data.charitynavigator\.org\/v2/
   validates :url_minus_auth, presence: true, format: {
-              with: VALID_URL_REGEX
+              with: VALID_URL_REGEX,
+              message: "is for an unknown API for which we may need to strip credentials"
             }
 
   # If we get a 5xx we should retry, not cache the error. We shouldn't get a
@@ -21,6 +19,27 @@ class Cacheline < ApplicationRecord
             }
 
   validates :uncompressed_body, presence: true
+
+  def self.lookup_cacheline(url, params_without_auth)
+    if params_without_auth["app_key"]
+      raise "oh noes!"
+    end
+    uri = URI(url)
+    uri.query = URI.encode_www_form(params_without_auth.map { |k, v| [k.to_s, v] }.sort)
+    find_by(url_minus_auth: uri.to_s)
+  end
+
+  def self.populate_cache!(url, params_without_auth, uncompressed_body)
+    if params_without_auth["app_key"]
+      raise "oh noes!"
+    end
+    uri = URI(url)
+    uri.query = URI.encode_www_form(params_without_auth.map { |k, v| [k.to_s, v] }.sort)
+    line = find_or_initialize_by(url_minus_auth: uri.to_s)
+    line.uncompressed_body = uncompressed_body
+    line.http_status = 200
+    line.save!
+  end
 
   private
 
@@ -46,18 +65,19 @@ class Cacheline < ApplicationRecord
     Zlib::Inflate.inflate(Base64.decode64(x))
   end
 
-  STRIPPED_URL_REGEX = /\Ahttps:..api.data.charitynavigator.org.v2.*\bapp_id=#{APP_ID_PLACEHOLDER}.*&app_key=#{APP_KEY_PLACEHOLDER}/i
-
-  def strip_authentication
-    return if url_minus_auth =~ STRIPPED_URL_REGEX
-    if url_minus_auth.include?(APP_KEY_PLACEHOLDER) || url_minus_auth.include?(APP_ID_PLACEHOLDER)
-      raise "Give URLs with auth"
+  def strip_authentication # must be idempotent in case someone tries to save, fails, and saves again
+    uri = URI(url_minus_auth)
+    if uri.nil? || uri.query.nil?
+      errors.add(:url_minus_auth, "is not a valid URI")
+      return
     end
-    self.url_minus_auth = url_minus_auth.gsub(
-      /([?&]app_key=)(\w+)/, "\\1#{APP_KEY_PLACEHOLDER}"
-    )
-    self.url_minus_auth = url_minus_auth.gsub(
-      /([?&]app_id=)(\w+)/, "\\1#{APP_ID_PLACEHOLDER}"
-    )
+    ary = URI.decode_www_form(uri.query).sort.select do |k, v|
+      !["app_id", "app_key"].include?(k)
+    end
+    uri.query = URI.encode_www_form(ary)
+    self.url_minus_auth = uri.to_s
+    if url_minus_auth.include?("app_key=")
+      raise "oh noes!"
+    end
   end
 end
