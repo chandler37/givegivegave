@@ -4,12 +4,15 @@ module CharityNavigator
   class Client
     BASE_URL = "https://api.data.charitynavigator.org".freeze
 
+    class Error < StandardError
+    end
+
+    class NotFoundError < Error
+    end
+
     def self.call(path, params: {}, without_reading_from_cache: false, method:)
       unless path[0] == "/"
         raise "path must start with /"
-      end
-      unless ENV["CHARITYNAVIGATOR_APP_ID"].present? && ENV["CHARITYNAVIGATOR_APP_KEY"].present?
-        raise "bad env"
       end
 
       cacheline = nil
@@ -22,6 +25,10 @@ module CharityNavigator
       end
 
       Rails.logger.info "Hitting CharityNavigator API"
+
+      unless ENV["CHARITYNAVIGATOR_APP_ID"].present? && ENV["CHARITYNAVIGATOR_APP_KEY"].present?
+        raise "bad env"
+      end
 
       conn = ::Faraday.new(url: BASE_URL) do |faraday|
         faraday.request :url_encoded
@@ -42,7 +49,10 @@ module CharityNavigator
       )
 
       unless response.status == 200
-        raise "response.status=#{response.status} and body=#{response.body} for path #{path}"
+        if response.status == 404
+          raise NotFoundError
+        end
+        raise Error.new("response.status=#{response.status} and body=#{response.body} for path #{path}")
       end
 
       unless ENV["WITHOUT_UPDATING_CACHE"] == "true"

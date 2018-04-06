@@ -26,7 +26,9 @@ class SearchCharitynavigator
         end
         context.response_json = [r]
       end
-    rescue => exc
+    rescue CharityNavigator::Client::NotFoundError
+      context.fail!(error: "EIN not found")
+    rescue CharityNavigator::Client::Error => exc
       context.fail!(error: "API call failed: #{exc.message}")
     end
   end

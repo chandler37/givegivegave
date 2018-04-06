@@ -6,11 +6,15 @@ class Charity < ApplicationRecord
 
   before_validation :normalize_ein
 
+  def self.canonical_ein(ein)
+    ein.strip.downcase.gsub("-", "")
+  end
+
   private
 
   def normalize_ein
     if ein.present?
-      self.ein = ein.strip.downcase.gsub("-", "")
+      self.ein = self.class.canonical_ein(ein)
     end
   end
 end
