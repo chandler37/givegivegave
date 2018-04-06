@@ -2,14 +2,28 @@
 
 module CharityNavigator
   class Client
-    def self.call(path, params: {}, method:)
+    BASE_URL = "https://api.data.charitynavigator.org".freeze
+
+    def self.call(path, params: {}, without_reading_from_cache: false, method:)
       unless path[0] == "/"
         raise "path must start with /"
       end
       unless ENV["CHARITYNAVIGATOR_APP_ID"].present? && ENV["CHARITYNAVIGATOR_APP_KEY"].present?
         raise "bad env"
       end
-      conn = ::Faraday.new(url: "https://api.data.charitynavigator.org") do |faraday|
+
+      cacheline = nil
+      if method == :get
+        cacheline = Cacheline.lookup_cacheline("#{BASE_URL}/v2#{path}", params)
+      end
+      if cacheline
+        Rails.logger.info "Cacheline saving us a CharityNavigator API hit"
+        return ::JSON.parse(cacheline.uncompressed_body)
+      end
+
+      Rails.logger.info "Hitting CharityNavigator API"
+
+      conn = ::Faraday.new(url: BASE_URL) do |faraday|
         faraday.request :url_encoded
         faraday.response :logger do |logger|
           logger.filter(/(app_key=)(\w+)/, '\1[REMOVED]')
@@ -17,6 +31,7 @@ module CharityNavigator
         end
         faraday.adapter ::Faraday.default_adapter
       end
+
       response = conn.public_send(
         method,
         "/v2#{path}",
@@ -25,13 +40,21 @@ module CharityNavigator
           app_key: ENV["CHARITYNAVIGATOR_APP_KEY"],
         }.merge(params)
       )
+
       unless response.status == 200
         raise "response.status=#{response.status} and body=#{response.body} for path #{path}"
       end
+
+      unless ENV["WITHOUT_UPDATING_CACHE"] == "true"
+        Cacheline.populate_cache!("#{BASE_URL}/v2#{path}", params, response.body)
+        # TODO(chandler37): write a rake task that cleans out the least
+        # recently used items
+      end
+
       ::JSON.parse(response.body)
     end
 
-    def self.get(path, params: {})
+    def self.get(path, params: {}, without_reading_from_cache: false)
       call(path, params: params, method: :get)
     end
 

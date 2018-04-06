@@ -79,6 +79,10 @@ GEM
       tilt
     i18n (1.0.0)
       concurrent-ruby (~> 1.0)
+    interactor (3.1.0)
+    interactor-rails (2.1.1)
+      interactor (~> 3.0)
+      rails (>= 4.2, < 5.2)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -257,6 +261,7 @@ DEPENDENCIES
   factory_bot
   factory_bot_rails
   faraday (~> 0.14.0)
+  interactor-rails (~> 2.0)
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   pg (>= 0.18, < 2.0)
