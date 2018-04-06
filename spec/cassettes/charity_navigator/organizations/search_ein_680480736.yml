@@ -1,0 +1,41 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.data.charitynavigator.org/v2/Organizations/680480736?app_id=<CHARITYNAVIGATOR_APP_ID>&app_key=<CHARITYNAVIGATOR_APP_KEY>
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.14.0
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      server:
+      - openresty/1.11.2.2
+      date:
+      - Fri, 06 Apr 2018 16:19:25 GMT
+      content-type:
+      - application/json; charset=utf-8
+      content-length:
+      - '1147'
+      connection:
+      - close
+      x-powered-by:
+      - Express
+      access-control-allow-origin:
+      - "*"
+      access-control-expose-headers:
+      - CN_Result_Count, objectCount
+      etag:
+      - W/"47b-KycJg72D3PTYqlVGqpxCx44ew6M"
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJjaGFyaXR5TmF2aWdhdG9yVVJMIjoiaHR0cHM6Ly93d3cuY2hhcml0eW5hdmlnYXRvci5vcmcvP2JheT1zZWFyY2gucHJvZmlsZSZlaW49NjgwNDgwNzM2JnV0bV9zb3VyY2U9RGF0YUFQSSZ1dG1fY29udGVudD0wMmM5NjBjYSIsInRhZ0xpbmUiOm51bGwsImNoYXJpdHlOYW1lIjoiTmV0d29yayBmb3IgR29vZCBJbmMuIiwiZWluIjoiNjgwNDgwNzM2IiwibWlzc2lvbiI6bnVsbCwid2Vic2l0ZVVSTCI6bnVsbCwiYWN0aXZlQWR2aXNvcmllcyI6eyJfcmFwaWRfbGlua3MiOnsicmVsYXRlZCI6eyJocmVmIjoiaHR0cHM6Ly9hcGkuZGF0YS5jaGFyaXR5bmF2aWdhdG9yLm9yZy92Mi9Pcmdhbml6YXRpb25zLzY4MDQ4MDczNi9BZHZpc29yaWVzP3N0YXR1cz1BQ1RJVkUifX19LCJyZW1vdmVkQWR2aXNvcmllcyI6eyJfcmFwaWRfbGlua3MiOnsicmVsYXRlZCI6eyJocmVmIjoiaHR0cHM6Ly9hcGkuZGF0YS5jaGFyaXR5bmF2aWdhdG9yLm9yZy92Mi9Pcmdhbml6YXRpb25zLzY4MDQ4MDczNi9BZHZpc29yaWVzP3N0YXR1cz1SRU1PVkVEIn19fSwiaXJzQ2xhc3NpZmljYXRpb24iOnsiZGVkdWN0aWJpbGl0eSI6IkNvbnRyaWJ1dGlvbnMgYXJlIGRlZHVjdGlibGUiLCJzdWJzZWN0aW9uIjoiNTAxKGMpKDMpIiwibnRlZVR5cGUiOiJQdWJsaWMgU2FmZXR5LCBEaXNhc3RlciBQcmVwYXJlZG5lc3MgYW5kIFJlbGllZiIsImZvdW5kYXRpb25TdGF0dXMiOiJPcmdhbml6YXRpb24gd2hpY2ggcmVjZWl2ZXMgYSBzdWJzdGFudGlhbCBwYXJ0IG9mIGl0cyBzdXBwb3J0IGZyb20gYSBnb3Zlcm5tZW50YWwgdW5pdCBvciB0aGUgZ2VuZXJhbCBwdWJsaWPCoMKgIDE3MChiKSgxKShBKSh2aSkiLCJudGVlU3VmZml4IjpudWxsLCJudGVlQ2xhc3NpZmljYXRpb24iOiJOb25tb25ldGFyeSBTdXBwb3J0IE4uRS5DLiIsImRlZHVjdGliaWxpdHlEZXRhaWwiOm51bGwsIm50ZWVDb2RlIjoiTTE5IiwibnRlZUxldHRlciI6Ik0ifSwibWFpbGluZ0FkZHJlc3MiOnsiY291bnRyeSI6bnVsbCwic3RhdGVPclByb3ZpbmNlIjoiREMiLCJjaXR5IjoiV0FTSElOR1RPTiIsInBvc3RhbENvZGUiOiIyMDAzNi00MDExIiwic3RyZWV0QWRkcmVzczEiOiIxMTQwIENPTk5FQ1RJQ1VUIEFWRSBOVyBTVEUgNzAwIiwic3RyZWV0QWRkcmVzczIiOm51bGx9fQ==
+    http_version: 
+  recorded_at: Fri, 06 Apr 2018 16:19:25 GMT
+recorded_with: VCR 4.0.0
