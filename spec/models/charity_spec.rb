@@ -6,6 +6,7 @@ RSpec.describe Charity, type: :model do
   it "builds" do
     Charity.create!(name: "f")
   end
+
   it "fails to build without a name" do
     expect {
       Charity.create!
@@ -17,6 +18,7 @@ RSpec.describe Charity, type: :model do
       Charity.create!(name: nil)
     }.to raise_error ActiveRecord::RecordInvalid
   end
+
   context "has a factory" do
     let!(:charity) { create :charity }
     it do
@@ -24,10 +26,15 @@ RSpec.describe Charity, type: :model do
       charity.reload
     end
   end
+
   specify "requires ein to be unique" do
     create :charity, ein: "Ab-1 "
     expect {
       create :charity, ein: "ab1"
     }.to raise_error ActiveRecord::RecordInvalid, /Ein has already been taken/
+  end
+
+  specify "canonicalizes EIN tax IDs" do
+    expect(described_class.canonical_ein(" -13--4 ")).to eq "134"
   end
 end
