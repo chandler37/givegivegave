@@ -1,12 +1,4 @@
 RSpec.describe CharityNavigator::Client do
-  before do
-    # To rerecord cassettes or add new cassettes you'll need a real API
-    # key. Set the environment variables below using, e.g., `export
-    # CHARITYNAVIGATOR_APP_ID=foo` in the same terminal you are using to run
-    # rspec.
-    ENV["CHARITYNAVIGATOR_APP_ID"] ||= "test"
-    ENV["CHARITYNAVIGATOR_APP_KEY"] ||= "test"
-  end
   describe "#get" do
     specify "works to GET /v2/Organizations and caches" do
       body = nil
