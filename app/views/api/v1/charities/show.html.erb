@@ -25,5 +25,7 @@
   <%= @charity.stars_overall %>
 </p>
 
-<% if can? :update, @charity %><%= link_to 'Edit', edit_charity_path(@charity) %> | <% end %>
-<%= link_to 'Back', charities_path %>
+<% if can? :update, @charity %>
+<%= link_to 'Edit', rails_admin.edit_path(model_name: 'charity', id: @charity.id) %> |
+<% end %>
+<%= link_to 'Back', api_charities_path %>

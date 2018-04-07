@@ -2,8 +2,6 @@ class Charity < ApplicationRecord
   validates :name, presence: true
   validates :ein, uniqueness: true
 
-  # TODO(chandler37): store the original EIN with "-" in it for display?
-
   before_validation :normalize_ein
 
   def self.some_golden_data_by_ein # useful for seeding and testing
