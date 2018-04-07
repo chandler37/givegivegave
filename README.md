@@ -4,7 +4,7 @@ The word "give" should make you think of a charity database.
 
 This is Ruby on Rails (Ruby 2.5, Rails 5.1) on Heroku. See
 https://devcenter.heroku.com/articles/getting-started-with-rails5
-regarding running `bundle install`, `bundle exec rake db:create`, `bundle exec rake db:migrate`, `bundle exec rails server`, `git
+regarding running `bundle install`, `bundle exec rake db:drop db:create`, `bundle exec rake db:migrate`, `bundle exec rails server`, `git
 push heroku my_topic_branch:master`, etc.
 
 For seeing your heroku logs you might like to install the free papertrail
@@ -60,7 +60,7 @@ Use `bundle exec rails c` locally or `heroku run bundle exec rails c`:
 
 ## Admin Interface
 
-You can use the /admin URL to manage database objects and users if you are a
+You can use the `/admin` URL to manage database objects and users if you are a
 superuser.
 
 ## Debugging the Database
@@ -111,3 +111,14 @@ installing it.
 Before tests will work you must create the test database with the following:
 
 `bundle exec rake db:create db:migrate`
+
+
+## Seeding the database
+
+`bundle exec rake db:seed` will create an admin user and several charities. You
+need to get a CharityNavigator API key ("app key") first and set a couple of
+environment variables (keep these secret!).
+
+If you run `bundle exec rails server` afterwards you should be able to login as
+admin@givegivegave.org with password adminadmin and the homepage will link you
+to rails_admin.

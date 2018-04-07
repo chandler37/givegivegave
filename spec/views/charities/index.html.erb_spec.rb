@@ -9,22 +9,14 @@ RSpec.describe "charities/index", type: :view do
         :ein => "Ein1",
         :description => "MyText",
         :score_overall => 2.5,
-        :score_financial => 3.5,
-        :score_accountability => 4.5,
         :stars_overall => 3,
-        :stars_financial => 4,
-        :stars_accountability => nil
       ),
       Charity.create!(
         :name => "Name",
         :ein => "Ein-2",
         :description => "MyText",
         :score_overall => 2.5,
-        :score_financial => 3.5,
-        :score_accountability => 4.5,
         :stars_overall => 3,
-        :stars_financial => 4,
-        :stars_accountability => nil
       )
     ])
   end
@@ -37,10 +29,7 @@ RSpec.describe "charities/index", type: :view do
     assert_select "tr>td", :text => "ein2".to_s, :count => 1
     assert_select "tr>td", :text => "MyText".to_s, :count => 2
     assert_select "tr>td", :text => 2.5.to_s, :count => 2
-    assert_select "tr>td", :text => 3.5.to_s, :count => 2
-    assert_select "tr>td", :text => 4.5.to_s, :count => 2
     assert_select "tr>td", :text => 3.to_s, :count => 2
-    assert_select "tr>td", :text => 4.to_s, :count => 2
-    assert_select "tr>td", :text => "".to_s, :count => 6
+    assert_select "tr>td", :text => "".to_s, :count => 4
   end
 end

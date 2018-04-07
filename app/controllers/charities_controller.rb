@@ -61,6 +61,6 @@ class CharitiesController < ::NonRailsAdminApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def charity_params
-    params.require(:charity).permit(:name, :ein, :description, :score_overall, :score_financial, :score_accountability, :stars_overall, :stars_financial, :stars_accountability)
+    params.require(:charity).permit(:name, :ein, :description, :score_overall, :stars_overall)
   end
 end

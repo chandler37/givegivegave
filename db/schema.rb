@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180406162143) do
+ActiveRecord::Schema.define(version: 20180407061559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,11 +29,7 @@ ActiveRecord::Schema.define(version: 20180406162143) do
     t.string "ein"
     t.text "description"
     t.float "score_overall"
-    t.float "score_financial"
-    t.float "score_accountability"
     t.integer "stars_overall"
-    t.integer "stars_financial"
-    t.integer "stars_accountability"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "website"
