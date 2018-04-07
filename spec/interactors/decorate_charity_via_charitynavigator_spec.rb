@@ -1,31 +1,5 @@
 RSpec.describe DecorateCharityViaCharitynavigator, type: :interactor do
-  let(:golden_charity_data_by_ein) {
-    # TODO(chandler37): Integrrate with other data sources to obtain correct
-    # websites where website is nil:
-    {
-      # metacharities:
-      "52-1070270" => {name: "bbb wise giving alliance",
-                       website: nil, correct_website: "give.org"},
-      "68-0480736" => {name: "network for good inc.",
-                       website: nil, correct_website: "networkforgood.com"},
-      "13-1837418" => {name: "foundation center",
-                       website: nil, correct_website: "foundationcenter.org"},
-      "33-0491030" => {name: "AMERICAN INSTITUTE OF PHILANTHROPY",
-                       website: nil, correct_website: "charitywatch.org"},
-      "54-1774039" => {name: "GUIDESTAR USA INC.",
-                       website: nil, correct_website: "guidestar.org"},
-      "14-2007220" => {name: "ProPublica",
-                       website: "http://www.propublica.org/"},
-
-      # charities:
-      "13-1635294" => {name: "United Way Worldwide",
-                       website: "http://www.unitedway.org/"},
-      "13-3039601" => {name: "alzheimer's association",
-                       website: "http://www.alz.org"},
-      "57-0881347" => {name: "South Carolina Governor's School for Science and Math Foundation",
-                       website: "https://www.scgssm.org/support/gssm-foundation-board"}
-    }
-  }
+  let(:golden_charity_data_by_ein) { Charity.some_golden_data_by_ein }
 
   describe "#call" do
     let!(:charity) { create :charity, ein: "680384748", name: "foobarbazquux" }

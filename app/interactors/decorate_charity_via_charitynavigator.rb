@@ -26,10 +26,10 @@ class DecorateCharityViaCharitynavigator
 
     charity.update_attributes!(
       name: json["charityName"],
-      stars_overall: json["currentRating"].try(:[], "rating"),
-      score_overall: json["currentRating"].try(:[], "score"),
-      description: json["mission"],
-      website: json["websiteURL"]
+      stars_overall: json["currentRating"].try(:[], "rating") || charity.stars_overall,
+      score_overall: json["currentRating"].try(:[], "score") || charity.score_overall,
+      description: json["mission"] || charity.description,
+      website: json["websiteURL"] || charity.website
     )
 
     # TODO(chandler37): add more. we have Cacheline so that we don't need to
