@@ -25,11 +25,7 @@ RSpec.describe DecorateCharityViaCharitynavigator, type: :interactor do
         "description" => "The American Cancer Society's mission is to save lives, celebrate lives, and lead the fight for a world without cancer.",
         "ein" => "131788491",
         "name" => "American Cancer Society",
-        "score_accountability" => nil,
-        "score_financial" => nil,
         "score_overall" => 71.48,
-        "stars_accountability" => nil,
-        "stars_financial" => nil,
         "stars_overall" => 2,
         "website" => "http://www.cancer.org",
       }
@@ -47,11 +43,7 @@ RSpec.describe DecorateCharityViaCharitynavigator, type: :interactor do
         "description" => "The Long Now Foundation was established in 01996* to develop the Clock and Library projects, as well as to become the seed of a very long-term cultural institution. The Long Now Foundation hopes to provide a counterpoint to today's accelerating culture and help make long-term thinking more common. We hope to foster responsibility in the framework of the next 10,000 years.",
         "ein" => "680384748",
         "name" => "Long Now Foundation",
-        "score_accountability" => nil,
-        "score_financial" => nil,
         "score_overall" => 86.51,
-        "stars_accountability" => nil,
-        "stars_financial" => nil,
         "stars_overall" => 3,
         "website" => "http://longnow.org/",
       }

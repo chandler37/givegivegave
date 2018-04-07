@@ -7,11 +7,7 @@ RSpec.describe "charities/new", type: :view do
       :ein => "MyString",
       :description => "MyText",
       :score_overall => 1.5,
-      :score_financial => 1.5,
-      :score_accountability => 1.5,
       :stars_overall => "",
-      :stars_financial => "",
-      :stars_accountability => ""
     ))
   end
 
@@ -28,15 +24,7 @@ RSpec.describe "charities/new", type: :view do
 
       assert_select "input[name=?]", "charity[score_overall]"
 
-      assert_select "input[name=?]", "charity[score_financial]"
-
-      assert_select "input[name=?]", "charity[score_accountability]"
-
       assert_select "input[name=?]", "charity[stars_overall]"
-
-      assert_select "input[name=?]", "charity[stars_financial]"
-
-      assert_select "input[name=?]", "charity[stars_accountability]"
     end
   end
 end

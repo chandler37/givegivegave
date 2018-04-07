@@ -21,29 +21,9 @@
 </p>
 
 <p>
-  <strong>Score financial:</strong>
-  <%= @charity.score_financial %>
-</p>
-
-<p>
-  <strong>Score accountability:</strong>
-  <%= @charity.score_accountability %>
-</p>
-
-<p>
   <strong>Stars overall:</strong>
   <%= @charity.stars_overall %>
 </p>
 
-<p>
-  <strong>Stars financial:</strong>
-  <%= @charity.stars_financial %>
-</p>
-
-<p>
-  <strong>Stars accountability:</strong>
-  <%= @charity.stars_accountability %>
-</p>
-
-<%= link_to 'Edit', edit_charity_path(@charity) %> |
+<% if can? :update, @charity %><%= link_to 'Edit', edit_charity_path(@charity) %> | <% end %>
 <%= link_to 'Back', charities_path %>
