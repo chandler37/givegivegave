@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "charities/index", type: :view do
+RSpec.describe "api/v1/charities/index", type: :view do
   include Devise::Test::ControllerHelpers
   before(:each) do
     assign(:charities, [

@@ -8,7 +8,7 @@ require 'rails_helper'
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem."
 
-RSpec.describe CharitiesController, type: :controller do
+RSpec.describe Api::V1::CharitiesController, type: :controller do
   include Devise::Test::ControllerHelpers
 
   let(:user) { create :user }
@@ -28,61 +28,49 @@ RSpec.describe CharitiesController, type: :controller do
   let(:valid_session) { {} }
 
   describe "GET #index" do
-    it "returns a success response if you are logged in" do
-      charity = Charity.create! valid_attributes
+    it "requires you to be logged in and confirmed" do
       get :index, params: {}, session: valid_session
       expect(response).to redirect_to(new_user_session_url)
+    end
+    it "returns a success response if you are logged in as non-admin" do
       sign_in user
       get :index, params: {}, session: valid_session
       expect(response).to be_success
-      sign_out user
+    end
+    it "returns a success response if you are logged in as admin -- HTML" do
       sign_in admin
-      get :index, params: {}, session: valid_session
-      expect(response).to be_success
+      [:html, :json].each do |format|
+        get :index, params: {}, session: valid_session, format: format
+        expect(response).to be_success
+        expect(response.status).to eq 200
+      end
     end
   end
 
   describe "GET #show" do
-    let(:charity) { create :charity }
-    it "returns a success response if you are logged in" do
-      sign_in user
-      get :show, params: {id: charity.to_param}, session: valid_session
-      expect(response).to be_success
+    let!(:charity) { create :charity }
+
+    context "returns a success response if you are logged in" do
+      before { sign_in user }
+
+      specify "html" do
+        get :show, params: {id: charity.to_param}, session: valid_session
+        expect(response).to be_success
+        expect(response.status).to eq 200
+      end
+
+      specify "json" do
+        get :show, params: {id: charity.to_param}, session: valid_session, format: :json
+        expect(response).to be_success
+        expect(response.status).to eq 200
+      end
     end
+
     it "302s if you haven't confirmed your email address" do
       user.update_attributes!(confirmed_at: nil)
       sign_in user
       get :show, params: {id: charity.to_param}, session: valid_session
       expect(response).to redirect_to(new_user_session_url)
-    end
-  end
-
-  describe "GET #new" do
-    it "returns a success response for admins" do
-      sign_in admin
-      get :new, params: {}, session: valid_session
-      expect(response).to be_success
-    end
-    it "302s if you're not an admin" do
-      sign_in user
-      get :new, params: {}, session: valid_session
-      expect(flash[:alert]).to eq "You are not authorized to access this page."
-      expect(response).to redirect_to(root_url)
-    end
-  end
-
-  describe "GET #edit" do
-    let!(:charity) { Charity.create! valid_attributes }
-    it "keeps out the great unwashed" do
-      sign_in user
-      get :edit, params: {id: charity.to_param}, session: valid_session
-      expect(flash[:alert]).to eq "You are not authorized to access this page."
-      expect(response).to redirect_to(root_url)
-    end
-    it "is successful for admins" do
-      sign_in admin
-      get :edit, params: {id: charity.to_param}, session: valid_session
-      expect(response).to be_success
     end
   end
 
@@ -107,15 +95,15 @@ RSpec.describe CharitiesController, type: :controller do
       it "redirects to the created charity" do
         sign_in admin
         post :create, params: {charity: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(Charity.last)
+        expect(response).to redirect_to(api_charity_url(Charity.last))
       end
     end
 
     context "with invalid params" do
-      it "for admins it returns a success response (i.e. to display the 'new' template)" do
+      it "for admins it 422s" do
         sign_in admin
         post :create, params: {charity: invalid_attributes}, session: valid_session
-        expect(response).to be_success
+        expect(response.status).to eq 422
       end
       it "for non-admins redirects" do
         sign_in user
@@ -127,19 +115,27 @@ RSpec.describe CharitiesController, type: :controller do
   end
 
   describe "PUT #update" do
-    let!(:charity) { Charity.create! valid_attributes }
+    let!(:charity) { create :charity }
 
     context "with valid params" do
       let(:new_attributes) {
-        {name: "American Red Cross", description: "well-known"}
+        {
+          name: "American Red Cross",
+          ein: "new ein",
+          description: "well-known",
+          score_overall: 66.2,
+          stars_overall: 99,
+          website: "givegivegave.org",
+        }
       }
 
       it "updates the requested charity" do
         sign_in admin
         put :update, params: {id: charity.to_param, charity: new_attributes}, session: valid_session
         charity.reload
-        expect(charity.name).to eq new_attributes[:name]
-        expect(charity.description).to eq new_attributes[:description]
+        new_attributes.each_key do |attr|
+          expect(charity.public_send(attr)).to eq new_attributes[attr]
+        end
       end
 
       it "redirects for non-admins" do
@@ -151,47 +147,69 @@ RSpec.describe CharitiesController, type: :controller do
         expect(response).to redirect_to(root_url)
       end
 
-      it "redirects to the charity" do
-        sign_in admin
-        put :update, params: {id: charity.to_param, charity: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(charity)
+      context "for admin" do
+        it "format html: redirects to the charity" do
+          sign_in admin
+          put :update, params: {id: charity.to_param, charity: valid_attributes}, session: valid_session
+          expect(response).to redirect_to(api_charity_url(charity))
+        end
+
+        it "format json: 204s" do
+          sign_in admin
+          put :update, params: {id: charity.to_param, charity: valid_attributes}, session: valid_session, format: :json
+          # TODO(chandler37): this is incorrect. Why? Since we don't know, we
+          # test this in the request spec
+          # spec/requests/api/v1/charities_spec.rb instead.
+          expect(response.body).to eq ""
+          expect(response.status).to eq 200
+        end
       end
     end
 
     context "with invalid params" do
-      it "returns a success response (i.e. to display the 'edit' template)" do
+      it "422s" do
         sign_in admin
         put :update, params: {id: charity.to_param, charity: invalid_attributes}, session: valid_session
-        expect(response).to be_success
+        expect(response.status).to eq 422
+        expect(response.body).to eq "{\"name\":[\"can't be blank\"]}"
       end
     end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested charity" do
-      sign_in admin
-      charity = Charity.create! valid_attributes
-      expect {
-        delete :destroy, params: {id: charity.to_param}, session: valid_session
-      }.to change(Charity, :count).by(-1)
-    end
+    let!(:charity) { create :charity }
 
-    it "redirects to the charities list" do
-      sign_in admin
-      charity = Charity.create! valid_attributes
-      delete :destroy, params: {id: charity.to_param}, session: valid_session
-      expect(response).to redirect_to(charities_url)
+    context "for admin" do
+      subject { delete :destroy, params: {id: charity.to_param}, session: valid_session }
+
+      it "destroys the requested charity" do
+        sign_in admin
+        expect { subject }.to change(Charity, :count).by(-1)
+      end
+
+      it "html: redirects to the charities list" do
+        sign_in admin
+        subject
+        expect(response).to redirect_to(api_charities_url)
+      end
+
+      it "json: 204s" do
+        sign_in admin
+        expect {
+          delete :destroy, params: {id: charity.to_param}, session: valid_session, format: :json
+        }.to change(Charity, :count).by(-1)
+        expect(response.status).to eq 204
+        expect(response.parsed_body).to eq ""
+      end
     end
 
     it "rejects non-admin users" do
       sign_in user
-      charity = Charity.create! valid_attributes
       delete :destroy, params: {id: charity.to_param}, session: valid_session
       expect(response).to redirect_to(root_url)
     end
 
     it "rejects the unauthenticated" do
-      charity = Charity.create! valid_attributes
       delete :destroy, params: {id: charity.to_param}, session: valid_session
       expect(response).to redirect_to(new_user_session_url)
     end

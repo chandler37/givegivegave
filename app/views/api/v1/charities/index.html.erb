@@ -22,9 +22,13 @@
         <td><%= charity.description %></td>
         <td><%= charity.score_overall %></td>
         <td><%= charity.stars_overall %></td>
-        <td><%= link_to 'Show', charity %></td>
-        <td><% if can? :update, charity %> <%= link_to 'Edit', edit_charity_path(charity) %><% end %></td>
-        <td><% if can? :destroy, charity %> <%= link_to 'Destroy', charity, method: :delete, data: { confirm: 'Are you sure?' } %><% end %> </td>
+        <td><%= link_to 'Show', api_charity_path(charity) %></td>
+        <td>
+	  <% if can? :update, charity %>
+	  <%= link_to('Edit', rails_admin.edit_path(model_name: 'charity', id: charity.id)) %>
+	  <% end %>
+	</td>
+        <td><% if can? :destroy, charity %> <%= link_to('Destroy', api_charity_path(charity), method: :delete, data: { confirm: 'Are you sure?' }) %><% end %> </td>
       </tr>
     <% end %>
   </tbody>
@@ -33,5 +37,5 @@
 <br>
 
 <% if can? :create, Charity %>
-<%= link_to 'New Charity', new_charity_path %>
+<%= link_to 'New Charity', rails_admin.new_path(model_name: 'charity') %>
 <% end %>
