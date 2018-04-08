@@ -50,6 +50,8 @@ gem 'interactor-rails', '~> 2.0'
 
 gem 'algoliasearch-rails'
 
+gem 'kaminari'
+
 # TODO(chandler37): do we need database-cleaner?
 
 group :development, :test do

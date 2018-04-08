@@ -6,7 +6,7 @@ module Api
       # GET /api/v1/charities
       # GET /api/v1/charities.json
       def index
-        # TODO(chandler37): kaminari pagination support
+        # TODO(chandler37): kaminari pagination support DLC
 
         if params[:search].present?
           @charities = if Charity.respond_to?(:search) && ENV["ALGOLIA_APPLICATION_ID"].present?

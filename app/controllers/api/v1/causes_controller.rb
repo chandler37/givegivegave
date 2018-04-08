@@ -8,7 +8,7 @@ module Api
       # GET /api/v1/causes
       # GET /api/v1/causes.json
       def index
-        # TODO(chandler37): kaminari pagination support
+        # TODO(chandler37): kaminari pagination support DLC
 
         if params[:search].present?
           @causes = if Cause.respond_to?(:search) && ENV["ALGOLIA_APPLICATION_ID"].present?
