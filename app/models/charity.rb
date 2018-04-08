@@ -1,8 +1,44 @@
 class Charity < ApplicationRecord
+  if ENV["ALGOLIA_APPLICATION_ID"].present?
+    include AlgoliaSearch
+
+    # index name is Charity_development or Charity_production:
+    algoliasearch(
+      per_environment: true,
+      sanitize: true,
+      force_utf8_encoding: true,
+      disable_indexing: Rails.env.test?
+    ) do
+      attribute :name, :ein, :display_ein, :description, :website, :score_overall, :stars_overall
+
+      # By order of importance. `description` is tagged as `unordered` to avoid
+      # taking the position of a match into account in that attribute.
+      searchableAttributes ['ein', 'display_ein', 'name', 'website', 'unordered(description)']
+
+      # the ranking criteria use to compare two matching records in case their
+      # text-relevance is equal:
+      customRanking ['desc(score_overall)']
+    end
+  end
+
   validates :name, presence: true
-  validates :ein, uniqueness: true
+  validates :ein, uniqueness: true, if: Proc.new { |c| c.ein.present? }
 
   before_validation :normalize_ein
+
+  def display_ein
+    return nil if ein.blank?
+    return ein unless ein =~ /\A\d{8,9}\z/
+    if ein.size == 8
+      "0#{ein[0]}-#{ein[1..-1]}"
+    else
+      "#{ein[0..1]}-#{ein[2..-1]}"
+    end
+  end
+
+  def display_ein_changed?  # so algolia doesn't reindex needlessly
+    ein_changed?
+  end
 
   def self.some_golden_data_by_ein # useful for seeding and testing
     # TODO(chandler37): Integrate with other data sources to obtain correct

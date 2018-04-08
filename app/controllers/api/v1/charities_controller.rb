@@ -6,6 +6,9 @@ module Api
       # GET /api/v1/charities
       # GET /api/v1/charities.json
       def index
+        # TODO(chandler37): When a search query is provided, use
+        # Charity.search("red cross") (note there's also raw_searcH) from
+        # algoliasearch.
       end
 
       # GET /api/v1/charities/1

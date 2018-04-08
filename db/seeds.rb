@@ -25,6 +25,14 @@ ActiveRecord::Base.transaction do
     end
   end
 
+  if ENV["DB_SEED_LOTS"]
+    (0..ENV["DB_SEED_LOTS"].to_i).each do |i|
+      Charity.create!(
+        name: "Seededed Charity#{i}"
+      )
+    end
+  end
+
   # Note that the above has created Cachelines as well. If you run rake db:seed
   # again it will use those, doing no HTTP calls.
 end

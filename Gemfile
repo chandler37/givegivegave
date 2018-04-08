@@ -47,6 +47,8 @@ gem 'sendgrid-actionmailer'
 
 gem 'interactor-rails', '~> 2.0'
 
+gem 'algoliasearch-rails'
+
 # TODO(chandler37): do we need database-cleaner?
 
 group :development, :test do

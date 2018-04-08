@@ -37,4 +37,19 @@ RSpec.describe Charity, type: :model do
   specify "canonicalizes EIN tax IDs" do
     expect(described_class.canonical_ein(" -13--4 ")).to eq "134"
   end
+
+  specify "has a display EIN" do
+    c = create(:charity, ein: "0"*9)
+    expect(c.display_ein).to eq "00-0000000"
+    expect(c.display_ein_changed?).to eq false
+    c.ein = "foo"
+    expect(c.display_ein_changed?).to eq true
+
+    c = create(:charity, ein: "1"*8)
+    expect(c.display_ein).to eq "01-1111111"
+    c = create(:charity, ein: "1"*7)
+    expect(c.display_ein).to eq "1"*7
+    c = create(:charity, ein: "f")
+    expect(c.display_ein).to eq "f"
+  end
 end
