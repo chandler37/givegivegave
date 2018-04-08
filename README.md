@@ -122,3 +122,14 @@ environment variables (keep these secret!).
 If you run `bundle exec rails server` afterwards you should be able to login as
 admin@givegivegave.org with password adminadmin and the homepage will link you
 to rails_admin.
+
+
+## Algolia Search
+
+Look at `config/initializers/algoliasearch.rb` to see how to set your
+credentials for Algolia if you want a search index for all your charities. You
+can use javascript APIs to search using only your frontend.
+
+TODO(chandler37): Integrate backend search into GET /api/v1/charities?search=red+cross
+
+See https://github.com/algolia/algoliasearch-rails
