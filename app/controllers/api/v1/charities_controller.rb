@@ -6,9 +6,15 @@ module Api
       # GET /api/v1/charities
       # GET /api/v1/charities.json
       def index
-        # TODO(chandler37): When a search query is provided, use
-        # Charity.search("red cross") (note there's also raw_searcH) from
-        # algoliasearch.
+        # TODO(chandler37): kaminari pagination support
+
+        if params[:search].present?
+          @charities = if Charity.respond_to?(:search) && ENV["ALGOLIA_APPLICATION_ID"].present?
+                         Charity.search(params[:search])
+                       else
+                         Charity.table_scan_search(params[:search])
+                       end
+        end
       end
 
       # GET /api/v1/charities/1
