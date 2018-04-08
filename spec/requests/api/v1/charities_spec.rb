@@ -3,7 +3,8 @@ RSpec.describe "Charities", type: :request do
   let!(:user) { create :user }
   let!(:admin) { create :admin }
   let(:charity) { create :charity }
-  let(:json_request_headers) { { "CONTENT_TYPE" => "application/json" } }
+  let(:content_type_json) { { "CONTENT_TYPE" => "application/json" } }
+  let(:accept_json) { { "ACCEPT" => "application/json" } }
 
   before do
     allow(Time).to receive(:now).and_return Time.at(37)
@@ -26,20 +27,42 @@ RSpec.describe "Charities", type: :request do
         expect(response.body).not_to include "Edit Charity"
       end
 
-      specify "format json" do
-        charity
-        sign_in user
-        get api_charities_path, headers: { "ACCEPT" => "application/json" }
-        expect(response).to have_http_status(200)
-        expect(JSON.parse(response.body)).to eq([{"id"=>charity.id,
-                                                  "name"=>charity.name,
-                                                  "ein"=>charity.ein,
-                                                  "description"=>nil,
-                                                  "score_overall"=>nil,
-                                                  "stars_overall"=>nil,
-                                                  "created_at"=>"1970-01-01T00:00:37.000Z",
-                                                  "updated_at"=>"1970-01-01T00:00:37.000Z",
-                                                  "url"=>"http://www.example.com/api/v1/charities/#{charity.id}.json"}])
+      context "format json" do
+        specify "not a search" do
+          charity
+          sign_in user
+          get api_charities_path, headers: accept_json
+          expect(response).to have_http_status(200)
+          expect(JSON.parse(response.body)).to eq([{"id"=>charity.id,
+                                                    "name"=>charity.name,
+                                                    "ein"=>charity.ein,
+                                                    "description"=>nil,
+                                                    "score_overall"=>nil,
+                                                    "stars_overall"=>nil,
+                                                    "created_at"=>"1970-01-01T00:00:37.000Z",
+                                                    "updated_at"=>"1970-01-01T00:00:37.000Z",
+                                                    "url"=>"http://www.example.com/api/v1/charities/#{charity.id}.json"}])
+        end
+        specify "a search" do
+          orange = create :charity, name: "orange"
+          create :charity, name: "banana"
+          sign_in user
+          get(
+            api_charities_path,
+            params: {search: orange.name},
+            headers: accept_json
+          )
+          expect(response).to have_http_status(200)
+          expect(JSON.parse(response.body)).to eq([{"id"=>orange.id,
+                                                    "name"=>orange.name,
+                                                    "ein"=>orange.ein,
+                                                    "description"=>nil,
+                                                    "score_overall"=>nil,
+                                                    "stars_overall"=>nil,
+                                                    "created_at"=>"1970-01-01T00:00:37.000Z",
+                                                    "updated_at"=>"1970-01-01T00:00:37.000Z",
+                                                    "url"=>"http://www.example.com/api/v1/charities/#{orange.id}.json"}])
+        end
       end
     end
 
@@ -71,7 +94,7 @@ RSpec.describe "Charities", type: :request do
 
       specify "format json" do
         sign_in user
-        get api_charity_path(charity), headers: { "ACCEPT" => "application/json" }
+        get api_charity_path(charity), headers: accept_json
         expect(response).to have_http_status(200)
         expect(JSON.parse(response.body)).to eq({"id"=>charity.id,
                                                  "name"=>charity.name,
@@ -104,7 +127,7 @@ RSpec.describe "Charities", type: :request do
 
     specify "redirects for authenticated non-admin users" do
       sign_in user
-      patch api_charity_path(charity), params: {charity: {name: "New Name"}}.to_json, headers: json_request_headers
+      patch api_charity_path(charity), params: {charity: {name: "New Name"}}.to_json, headers: content_type_json
       expect(response).to have_http_status(302)
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq "You are not authorized to access this page."
@@ -114,7 +137,7 @@ RSpec.describe "Charities", type: :request do
       before { sign_in admin }
 
       specify "format html" do
-        patch api_charity_path(charity), params: {charity: {name: "New Name"}}.to_json, headers: json_request_headers
+        patch api_charity_path(charity), params: {charity: {name: "New Name"}}.to_json, headers: content_type_json
         expect(charity.reload.name).to eq "New Name"
         expect(response).to have_http_status(302)
         expect(response).to redirect_to(api_charity_path(charity))
@@ -122,7 +145,11 @@ RSpec.describe "Charities", type: :request do
       end
 
       specify "format json" do
-        patch api_charity_path(charity), params: {charity: {name: "New Name"}}.to_json, headers: json_request_headers.merge({ "ACCEPT" => "application/json" })
+        patch(
+          api_charity_path(charity),
+          params: {charity: {name: "New Name"}}.to_json,
+          headers: content_type_json.merge(accept_json)
+        )
         expect(response).to have_http_status(200)
         expect(JSON.parse(response.body)).to eq({"id"=>charity.id,
                                                  "name"=>"New Name",
@@ -146,7 +173,7 @@ RSpec.describe "Charities", type: :request do
 
     specify "redirects for authenticated non-admin users" do
       sign_in user
-      post api_charities_path, params: {charity: {name: "foobar"}}.to_json, headers: json_request_headers
+      post api_charities_path, params: {charity: {name: "foobar"}}.to_json, headers: content_type_json
       expect(response).to have_http_status(302)
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq "You are not authorized to access this page."
@@ -158,7 +185,7 @@ RSpec.describe "Charities", type: :request do
       specify "unless the EIN already exists" do
         create :charity, ein: "0123"
         expect {
-          post api_charities_path, params: {charity: {name: "foo", ein: "0123"}}.to_json, headers: json_request_headers
+          post api_charities_path, params: {charity: {name: "foo", ein: "0123"}}.to_json, headers: content_type_json
         }.to change(Charity, :count).by(0)
         expect(response.body).to eq "{\"ein\":[\"has already been taken\"]}"
         expect(response).to have_http_status(422)
@@ -166,21 +193,25 @@ RSpec.describe "Charities", type: :request do
 
       specify "and unless the name is empty" do
         expect {
-          post api_charities_path, params: {charity: {name: ""}}.to_json, headers: json_request_headers
+          post api_charities_path, params: {charity: {name: ""}}.to_json, headers: content_type_json
         }.to change(Charity, :count).by(0)
         expect(response.body).to eq "{\"name\":[\"can't be blank\"]}"
         expect(response).to have_http_status(422)
       end
 
       specify "format html" do
-        post api_charities_path, params: {charity: {name: "foobar"}}.to_json, headers: json_request_headers
+        post api_charities_path, params: {charity: {name: "foobar"}}.to_json, headers: content_type_json
         expect(Charity.last.name).to eq "foobar"
         expect(response).to have_http_status(302)
         expect(response).to redirect_to(api_charity_url(Charity.last))
       end
 
       specify "format json" do
-        post api_charities_path, params: {charity: {name: "a charity"}}.to_json, headers: json_request_headers.merge({ "ACCEPT" => "application/json" })
+        post(
+          api_charities_path,
+          params: {charity: {name: "a charity"}}.to_json,
+          headers: content_type_json.merge(accept_json)
+        )
         expect(response).to have_http_status(201)
         charity = Charity.last
         expect(JSON.parse(response.body)).to eq({"id"=>charity.id,

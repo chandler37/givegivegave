@@ -75,6 +75,17 @@ class Charity < ApplicationRecord
     ein.strip.downcase.gsub("-", "")
   end
 
+  # This has worse search quality (information retrieval quality) than using
+  # Algolia and will grind the database to a halt. Consider Algolia's #search
+  # or #raw_search methods.
+  def self.table_scan_search(query)
+    # postgres extension: ILIKE: case-insensitive LIKE
+    where(
+      "name ILIKE :q OR ein ILIKE :q OR website ILIKE :q OR description ILIKE :q",
+      q: query
+    )
+  end
+
   private
 
   def normalize_ein
