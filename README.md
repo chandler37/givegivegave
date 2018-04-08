@@ -131,3 +131,5 @@ credentials for Algolia if you want a search index for all your charities. You
 can use javascript APIs to search using only your frontend.
 
 TODO(chandler37): Integrate backend search into GET /api/v1/charities?search=red+cross
+
+See https://github.com/algolia/algoliasearch-rails
