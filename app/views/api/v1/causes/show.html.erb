@@ -1,0 +1,22 @@
+<p>
+  <strong>Name:</strong>
+  <%= @cause.full_name %>
+</p>
+
+<% if @cause.parent %>
+<p>
+  <strong>Parent Cause:</strong>
+  <%= @cause.parent.full_name %>
+  <%= link_to @cause.parent.full_name, api_cause_path(@cause.parent) %>
+</p>
+<% end %>
+
+<p>
+  <strong>Description:</strong>
+  <%= @cause.description %>
+</p>
+
+<% if can? :update, @cause %>
+<%= link_to 'Edit', rails_admin.edit_path(model_name: 'cause', id: @cause.id) %> |
+<% end %>
+<%= link_to 'Back', api_causes_path %>

@@ -15,6 +15,7 @@ RSpec.describe "Charities", type: :request do
     it "redirects for unauthenticated folks" do
       get api_charities_path
       expect(response).to have_http_status(302)
+      expect(response).to redirect_to(new_user_session_path)
     end
 
     context "works for authenticated non-admin users" do
@@ -40,7 +41,7 @@ RSpec.describe "Charities", type: :request do
                                                     "score_overall"=>nil,
                                                     "stars_overall"=>nil,
                                                     "created_at"=>"1970-01-01T00:00:37.000Z",
-                                                    "updated_at"=>"1970-01-01T00:00:37.000Z",
+                                                    "causes" => [],
                                                     "url"=>"http://www.example.com/api/v1/charities/#{charity.id}.json"}])
         end
         specify "a search" do
@@ -60,7 +61,7 @@ RSpec.describe "Charities", type: :request do
                                                     "score_overall"=>nil,
                                                     "stars_overall"=>nil,
                                                     "created_at"=>"1970-01-01T00:00:37.000Z",
-                                                    "updated_at"=>"1970-01-01T00:00:37.000Z",
+                                                    "causes" => [],
                                                     "url"=>"http://www.example.com/api/v1/charities/#{orange.id}.json"}])
         end
       end
@@ -76,7 +77,7 @@ RSpec.describe "Charities", type: :request do
     end
   end
 
-  describe "show: GET /api/v1/charities/{id}" do
+  describe "show: GET /api/v1/charities/:id" do
     it "redirects for unauthenticated folks" do
       get api_charity_path(charity)
       expect(response).to have_http_status(302)
@@ -94,17 +95,30 @@ RSpec.describe "Charities", type: :request do
 
       specify "format json" do
         sign_in user
+        cause0 = create(:cause, name: "Health")
+        cause0_child = create(:cause, parent_id: cause0.id, name: "Diseases")
+        cause2 = create(:cause, name: "Education")
+        charity.causes << cause0_child
+        charity.causes << cause2
+        expect(cause0_child.parent_id).to eq cause0.id
+        expect(cause0_child.parent).to eq cause0
+        expect(cause0.children).to eq [cause0_child]
+        expect(charity.causes.size).to eq 2
+        expect(charity.causes.map { |cause| cause.id }).to eq [cause0_child.id, cause2.id]
         get api_charity_path(charity), headers: accept_json
         expect(response).to have_http_status(200)
-        expect(JSON.parse(response.body)).to eq({"id"=>charity.id,
-                                                 "name"=>charity.name,
-                                                 "ein"=>charity.ein,
-                                                 "description"=>nil,
-                                                 "score_overall"=>nil,
-                                                 "stars_overall"=>nil,
-                                                 "created_at"=>"1970-01-01T00:00:37.000Z",
-                                                 "updated_at"=>"1970-01-01T00:00:37.000Z",
-                                                 "url"=>"http://www.example.com/api/v1/charities/#{charity.id}.json"})
+        gold = {
+          "id"=>charity.id,
+          "name"=>charity.name,
+          "ein"=>charity.ein,
+          "description"=>nil,
+          "score_overall"=>nil,
+          "stars_overall"=>nil,
+          "created_at"=>"1970-01-01T00:00:37.000Z",
+          "causes" => [{"id"=>cause0_child.id, "full_name"=>"Health/Diseases"},
+                       {"id"=>cause2.id, "full_name"=>cause2.full_name}],
+          "url"=>"http://www.example.com/api/v1/charities/#{charity.id}.json"}
+        expect(JSON.parse(response.body)).to eq(gold)
       end
     end
 
@@ -116,7 +130,7 @@ RSpec.describe "Charities", type: :request do
     end
   end
 
-  describe "update: PATCH /api/v1/charities/{id}" do
+  describe "update: PATCH /api/v1/charities/:id" do
     let!(:charity) { create :charity }
 
     it "redirects for unauthenticated folks" do
@@ -158,7 +172,7 @@ RSpec.describe "Charities", type: :request do
                                                  "score_overall"=>nil,
                                                  "stars_overall"=>nil,
                                                  "created_at"=>"1970-01-01T00:00:37.000Z",
-                                                 "updated_at"=>"1970-01-01T00:00:37.000Z",
+                                                 "causes" => [],
                                                  "url"=>"http://www.example.com/api/v1/charities/#{charity.id}.json"})
       end
     end
@@ -221,7 +235,7 @@ RSpec.describe "Charities", type: :request do
                                                  "score_overall"=>nil,
                                                  "stars_overall"=>nil,
                                                  "created_at"=>"1970-01-01T00:00:37.000Z",
-                                                 "updated_at"=>"1970-01-01T00:00:37.000Z",
+                                                 "causes" => [],
                                                  "url"=>"http://www.example.com/api/v1/charities/#{charity.id}.json"})
       end
     end
