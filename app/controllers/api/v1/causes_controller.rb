@@ -10,10 +10,12 @@ module Api
       def index
         # TODO(chandler37): kaminari pagination support
 
-        # TODO(chandler37): Algolia search integration over this tiny, tiny
-        # corpus for autocompletion's sake
         if params[:search].present?
-          @causes = Cause.table_scan_search(params[:search])
+          @causes = if Cause.respond_to?(:search) && ENV["ALGOLIA_APPLICATION_ID"].present?
+                      Cause.search(params[:search])
+                    else
+                      Cause.table_scan_search(params[:search])
+                    end
         end
       end
 

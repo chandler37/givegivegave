@@ -16,6 +16,15 @@
   <%= @cause.description %>
 </p>
 
+<% if @cause.charities.size > 0 %>
+<p>
+  <strong>One Random Charity:</strong>
+  <%= link_to 'A random charity', api_charity_path(@cause.charities.sample) %>
+</p>
+<% end %>
+
+<%# TODO(chandler37): give a paginated list of charities here %>
+
 <% if can? :update, @cause %>
 <%= link_to 'Edit', rails_admin.edit_path(model_name: 'cause', id: @cause.id) %> |
 <% end %>
