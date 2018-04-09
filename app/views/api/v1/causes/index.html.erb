@@ -1,0 +1,33 @@
+<h1>Causes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @causes.each do |cause| %>
+      <tr>
+        <td><%= cause.full_name %></td>
+        <td><%= cause.description %></td>
+        <td><%= link_to 'Show', api_cause_path(cause) %></td>
+        <td>
+	  <% if can? :update, cause %>
+	  <%= link_to('Edit', rails_admin.edit_path(model_name: 'cause', id: cause.id)) %>
+	  <% end %>
+	</td>
+        <td><% if can? :destroy, cause %> <%= link_to('Destroy', api_cause_path(cause), method: :delete, data: { confirm: 'Are you sure?' }) %><% end %> </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% if can? :create, Cause %>
+<%= link_to 'New Cause', rails_admin.new_path(model_name: 'cause') %>
+<% end %>

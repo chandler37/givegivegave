@@ -26,6 +26,8 @@ class Charity < ApplicationRecord
 
   before_validation :normalize_ein
 
+  has_and_belongs_to_many :causes
+
   def display_ein
     return nil if ein.blank?
     return ein unless ein =~ /\A\d{8,9}\z/

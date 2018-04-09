@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Name:</strong>
   <%= @charity.name %>
@@ -23,6 +21,12 @@
 <p>
   <strong>Stars overall:</strong>
   <%= @charity.stars_overall %>
+</p>
+
+<p>
+  <strong>Causes:</strong>
+  <%== @charity.causes.sort.map { |cause| link_to cause.full_name, api_cause_path(cause) }.join(", ") %>
+  <%# TODO(chandler37): am i using raw correctly? %>
 </p>
 
 <% if can? :update, @charity %>

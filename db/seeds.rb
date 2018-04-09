@@ -15,6 +15,9 @@ ActiveRecord::Base.transaction do
     end
   end
 
+  health = Cause.create!(name: "Health")
+  disease = Cause.create!(name: "Disease Amelioration", parent_id: health.id)
+
   Charity.some_golden_data_by_ein.each do |ein, hsh|
     result = DecorateCharityViaCharitynavigator.call!(ein: ein)
     unless result.charity.name =~ /\A[^?]/
@@ -32,6 +35,9 @@ ActiveRecord::Base.transaction do
       )
     end
   end
+
+  alz = Charity.find_by(ein: "133039601")
+  alz.causes << disease
 
   # Note that the above has created Cachelines as well. If you run rake db:seed
   # again it will use those, doing no HTTP calls.
