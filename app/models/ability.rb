@@ -7,7 +7,7 @@ class Ability
       can :read, :dashboard       # grant access to the dashboard
       can :manage, :all
     else
-      can :read, :all
+      can :read, :all # sessions_spec.rb tests that this disallows access to rails_admin.
     end
 
     #

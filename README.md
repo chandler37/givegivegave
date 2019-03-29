@@ -2,7 +2,7 @@
 
 The word "give" should make you think of a charity database.
 
-This is Ruby on Rails (Ruby 2.5, Rails 5.1) on Heroku. See
+This is Ruby on Rails (Ruby 2.5, Rails 5.2.3) on Heroku. See
 https://devcenter.heroku.com/articles/getting-started-with-rails5
 regarding running `bundle install`, `bundle exec rake db:drop db:create`, `bundle exec rake db:migrate`, `bundle exec rails server`, `git
 push heroku my_topic_branch:master`, etc.
@@ -112,6 +112,8 @@ Before tests will work you must create the test database with the following:
 
 `bundle exec rake db:create db:migrate`
 
+Note that we use Travis CI via `.travis.yml`. TODO(chandler37): Upgrade from
+ruby 2.4 for Travis.
 
 ## Seeding the database
 
@@ -133,3 +135,13 @@ can use javascript APIs to search using only your frontend.
 TODO(chandler37): Integrate backend search into GET /api/v1/charities?search=red+cross
 
 See https://github.com/algolia/algoliasearch-rails
+
+## Security Updates
+
+You should subscribe to the security announcement mailing lists (or, if there
+is none, the general announcement mailing list) for all third party
+libraries. Github itself does some limited security vulnerability tracking for
+owners of repositories by monitoring `Gemfile.lock`.
+
+When you find a vulnerability, upgrade the affected gem using `bundle update`
+after removing any version contraint in `Gemfile` that pins to a vulnerable version.

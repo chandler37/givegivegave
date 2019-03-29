@@ -35,13 +35,13 @@ RSpec.describe Api::V1::CharitiesController, type: :controller do
     it "returns a success response if you are logged in as non-admin" do
       sign_in user
       get :index, params: {}, session: valid_session
-      expect(response).to be_success
+      expect(response).to be_successful
     end
     it "returns a success response if you are logged in as admin -- HTML" do
       sign_in admin
       [:html, :json].each do |format|
         get :index, params: {}, session: valid_session, format: format
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.status).to eq 200
       end
     end
@@ -55,13 +55,13 @@ RSpec.describe Api::V1::CharitiesController, type: :controller do
 
       specify "html" do
         get :show, params: {id: charity.to_param}, session: valid_session
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.status).to eq 200
       end
 
       specify "json" do
         get :show, params: {id: charity.to_param}, session: valid_session, format: :json
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.status).to eq 200
       end
     end

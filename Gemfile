@@ -7,7 +7,7 @@ end
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.6'
+gem 'rails', '~> 5.2.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -39,6 +39,7 @@ gem 'faraday', '~> 0.14.0'
 
 gem 'rails_admin', '~> 1.3'
 
+gem 'warden', '~> 1.2.8' # devise allows 1.2.3
 gem 'devise'
 
 gem 'cancancan', '~> 2.0'
@@ -52,8 +53,11 @@ gem 'algoliasearch-rails'
 # TODO(chandler37): do we need database-cleaner?
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+end
+
+group :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'rspec-rails', '~> 3.7'
   gem 'vcr', '~> 4.0'
   gem 'factory_bot_rails'
@@ -72,4 +76,4 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-ruby ENV['TRAVIS_RUBY_VERSION'] || '2.5.1'
+ruby ENV['TRAVIS_RUBY_VERSION'] || '2.5.5'
