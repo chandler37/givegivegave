@@ -103,10 +103,10 @@ Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f }
 # To rerecord cassettes or add new cassettes you'll need a real API key. Set
 # the environment variables below using, e.g., `export
 # CHARITYNAVIGATOR_APP_ID=foo` in the same terminal you are using to run rspec.
-if ENV["CHARITYNAVIGATOR_APP_ID"].blank?
+if ENV["CHARITYNAVIGATOR_APP_ID"].nil?
   ENV["CHARITYNAVIGATOR_APP_ID"] = "test1"
 end
-if ENV["CHARITYNAVIGATOR_APP_KEY"].blank?
+if ENV["CHARITYNAVIGATOR_APP_KEY"].nil?
   ENV["CHARITYNAVIGATOR_APP_KEY"] = "test1"
 end
 
