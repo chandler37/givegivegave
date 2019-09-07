@@ -2,7 +2,7 @@
 
 The word "give" should make you think of a charity database.
 
-This is Ruby on Rails (Ruby 2.5, Rails 5.2.3) on Heroku. See
+This is Ruby on Rails (Ruby 2.6, Rails 5.2.3) on Heroku. See
 https://devcenter.heroku.com/articles/getting-started-with-rails5
 regarding running `bundle install`, `bundle exec rake db:drop db:create`, `bundle exec rake db:migrate`, `bundle exec rails server`, `git
 push heroku my_topic_branch:master`, etc.
