@@ -112,8 +112,7 @@ Before tests will work you must create the test database with the following:
 
 `bundle exec rake db:create db:migrate`
 
-Note that we use Travis CI via `.travis.yml`. TODO(chandler37): Upgrade from
-ruby 2.4 for Travis.
+Note that we use Travis CI via `.travis.yml`.
 
 ## Seeding the database
 
